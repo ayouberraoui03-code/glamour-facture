@@ -1,0 +1,919 @@
+<!doctype html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>NADIA GLAMOUR • Factures Traiteur (PRO)</title>
+  <style>
+    :root{
+      --bg:#07090d;
+      --text:#f4f1e6;
+      --muted:#c8c1a8;
+      --line:rgba(212,175,55,.22);
+      --danger:#ff4d6d;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 900px at 20% 10%, #1a1f2b 0%, var(--bg) 60%);
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      padding:18px;
+    }
+    .app{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;gap:14px}
+    @media(max-width:1000px){.app{grid-template-columns:1fr}}
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+    }
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+    .badge{
+      border:1px solid rgba(212,175,55,.35);
+      background: rgba(212,175,55,.10);
+      padding:6px 10px;border-radius:999px;
+      font-size:12px;font-weight:900;letter-spacing:.3px;
+    }
+    .stats{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .pill{
+      border:1px solid rgba(212,175,55,.30);
+      background: rgba(0,0,0,.18);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;color:var(--muted);
+      display:flex;gap:8px;align-items:center;white-space:nowrap;
+    }
+    .pill b{color:var(--text)}
+    h1{margin:0;font-size:16px}
+    h2{margin:12px 0 8px 0;font-size:13px;color:var(--muted);font-weight:900}
+    label{display:block;margin:10px 0 6px;font-size:12px;color:var(--muted)}
+    input, textarea, select{
+      width:100%;
+      padding:10px 12px;border-radius:12px;
+      border:1px solid rgba(212,175,55,.22);
+      background: rgba(0,0,0,.22);
+      color:var(--text);outline:none;
+    }
+    textarea{min-height:72px;resize:vertical}
+    input[disabled]{opacity:.8}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .row3{display:grid;grid-template-columns:1.35fr .55fr .55fr .55fr;gap:10px;align-items:end}
+    @media(max-width:700px){.row,.row3{grid-template-columns:1fr}}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{border-bottom:1px solid rgba(212,175,55,.18);padding:10px 8px;font-size:13px}
+    th{color:var(--muted);font-size:12px}
+    .right{text-align:right}
+    .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+    button{
+      border:1px solid rgba(212,175,55,.28);
+      background: rgba(0,0,0,.20);
+      color:var(--text);
+      padding:10px 12px;border-radius:12px;
+      cursor:pointer;font-weight:900;
+      -webkit-tap-highlight-color: transparent;
+      transition:.15s transform, .15s opacity;
+    }
+    button:active{transform:scale(.98);opacity:.9}
+    .primary{background:linear-gradient(180deg, rgba(212,175,55,.22), rgba(212,175,55,.08));border-color:rgba(212,175,55,.45)}
+    .danger{background:linear-gradient(180deg, rgba(255,77,109,.18), rgba(255,77,109,.08));border-color:rgba(255,77,109,.35)}
+    .ghost{background:transparent;border-style:dashed}
+    .note{font-size:12px;color:var(--muted);line-height:1.35}
+
+    /* Right list */
+    .listHead{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .list{
+      max-height:460px; overflow:auto;
+      border:1px solid rgba(212,175,55,.18);
+      border-radius:14px;background:rgba(0,0,0,.15);
+    }
+    .item{
+      padding:10px 12px;
+      border-bottom:1px solid rgba(212,175,55,.14);
+      cursor:pointer;
+      display:flex;gap:10px;justify-content:space-between;align-items:flex-start;
+    }
+    .item:hover{background:rgba(212,175,55,.06)}
+    .item.active{background:rgba(212,175,55,.10)}
+    .item small{color:var(--muted)}
+    .hr{height:1px;background:rgba(212,175,55,.16);margin:10px 0}
+
+    /* Print area */
+    .printWrap{background:#fff;color:#111;border-radius:16px;overflow:hidden;border:1px solid #eee}
+    .pHead{display:flex;justify-content:space-between;gap:14px;padding:18px;border-bottom:1px solid #eee;align-items:flex-start}
+    .pLogoBox{display:flex;align-items:center;gap:12px}
+    .pLogo{
+      width:84px;height:84px;object-fit:contain;border-radius:12px;
+      border:1px solid #eee;background:#000;padding:6px;
+    }
+    .pBrand .name{font-weight:1000;font-size:18px;letter-spacing:.5px}
+    .pBrand .sub{font-size:12px;color:#444}
+    .pMeta{text-align:right;font-size:12px;color:#333}
+    .pMeta .tag{display:inline-block;padding:3px 10px;border:1px solid #ddd;border-radius:999px;font-size:11px;margin-bottom:6px}
+    .pBody{padding:18px}
+    .pGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .pBlock{font-size:12px;color:#222}
+    .pBlock b{display:block;color:#000;margin-bottom:4px}
+    .pTable{width:100%;border-collapse:collapse;margin-top:12px}
+    .pTable th,.pTable td{border-bottom:1px solid #eee;padding:10px 8px;font-size:12px}
+    .pTable th{color:#555}
+    .pTotals{margin-top:12px;max-width:360px;margin-left:auto;display:grid;gap:6px;font-size:12px;color:#333}
+    .pTotals div{display:flex;justify-content:space-between}
+    .pTotals b{font-size:14px}
+    .pFoot{padding:18px;border-top:1px solid #eee;font-size:12px;color:#333;display:grid;gap:10px}
+    .sigRow{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end}
+    .sigBox{border:1px dashed #ccc;border-radius:12px;min-height:64px;padding:10px}
+    .sigBox b{display:block;margin-bottom:4px}
+    .pMuted{color:#555}
+    .pRight{text-align:right}
+
+    @media print{
+      body{background:#fff;color:#000;padding:0}
+      .app{display:block}
+      .no-print{display:none !important}
+      .card{border:none;background:#fff;padding:0}
+      .printWrap{border:none;border-radius:0}
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+  <!-- LEFT -->
+  <div class="card no-print">
+    <div class="topbar">
+      <div class="badge" id="ui_badge">NADIA GLAMOUR • SERVICE TRAITEUR</div>
+      <div class="stats">
+        <div class="pill"><span id="ui_total_label">Total</span>: <b><span id="ui_total">0.00</span> <span id="ui_cur">MAD</span></b></div>
+        <div class="pill"># <b id="ui_number">—</b></div>
+        <div class="pill"><span id="ui_lang_label">Lang</span>: <b id="ui_lang">FR</b></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label id="lb_lang">Langue</label>
+        <select id="lang">
+          <option value="fr">Français</option>
+          <option value="ar">العربية</option>
+        </select>
+      </div>
+      <div>
+        <label id="lb_currency">Devise</label>
+        <select id="currency">
+          <option value="MAD">MAD</option>
+          <option value="EUR">EUR</option>
+          <option value="USD">USD</option>
+        </select>
+      </div>
+    </div>
+
+    <h2 id="sec_invoice">Infos Facture</h2>
+    <div class="row">
+      <div>
+        <label id="lb_number">N° Facture</label>
+        <input id="invNumber" />
+      </div>
+      <div>
+        <label id="lb_date">Date</label>
+        <input id="invDate" type="date" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label id="lb_event">Événement</label>
+        <input id="eventName" placeholder="Ex: Mariage / Fiançailles / Anniversaire" />
+      </div>
+      <div>
+        <label id="lb_place">Lieu</label>
+        <input id="eventPlace" placeholder="Ex: Salle X, Casablanca" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label id="lb_client">Client</label>
+        <input id="clientName" placeholder="Nom du client" />
+      </div>
+      <div>
+        <label id="lb_phone">Téléphone</label>
+        <input id="clientPhone" placeholder="06..." />
+      </div>
+    </div>
+
+    <label id="lb_address">Adresse / Détails client</label>
+    <textarea id="clientInfo" placeholder="Adresse, email..."></textarea>
+
+    <div class="row">
+      <div>
+        <label id="lb_pay">Paiement</label>
+        <select id="paymentStatus">
+          <option value="non_paye">Non payé</option>
+          <option value="avance">Avance</option>
+          <option value="paye">Payé</option>
+        </select>
+      </div>
+      <div>
+        <label id="lb_advance">Avance</label>
+        <input id="advance" type="number" min="0" step="0.01" value="0" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label id="lb_due">Reste à payer</label>
+        <input id="due" type="text" value="0.00" disabled />
+      </div>
+      <div>
+        <label id="lb_empty"> </label>
+        <input type="text" disabled value="✅ Sans TVA" />
+      </div>
+    </div>
+
+    <h2 id="sec_lines">Lignes (Services)</h2>
+    <div class="row">
+      <div>
+        <label id="lb_preset">Preset (Traiteur)</label>
+        <select id="preset">
+          <option value="">— Choisir —</option>
+          <option value="Buffet complet">Buffet complet</option>
+          <option value="Service serveurs">Service serveurs</option>
+          <option value="Boissons">Boissons</option>
+          <option value="Gâteaux / Pâtisserie">Gâteaux / Pâtisserie</option>
+          <option value="Décoration table">Décoration table</option>
+          <option value="Location matériel">Location matériel</option>
+          <option value="Cuisine sur place">Cuisine sur place</option>
+          <option value="Transport">Transport</option>
+        </select>
+      </div>
+      <div>
+        <label id="lb_desc_hint">Astuce</label>
+        <input disabled value="Choisis preset → كيتعمر الوصف تلقائياً" />
+      </div>
+    </div>
+
+    <div class="row3">
+      <div>
+        <label id="lb_desc">Description</label>
+        <input id="desc" placeholder="Ex: Buffet (120 personnes)" />
+      </div>
+      <div>
+        <label id="lb_qty">Qté</label>
+        <input id="qty" type="number" min="1" step="1" value="1" />
+      </div>
+      <div>
+        <label id="lb_unit">Prix Unitaire</label>
+        <input id="price" type="number" min="0" step="0.01" value="0" />
+      </div>
+      <div>
+        <button class="primary" id="addLine">+ Ajouter</button>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th id="th_desc">Description</th>
+          <th class="right" id="th_qty">Qté</th>
+          <th class="right" id="th_unit">PU</th>
+          <th class="right" id="th_total">Total</th>
+          <th class="right"></th>
+        </tr>
+      </thead>
+      <tbody id="lines"></tbody>
+    </table>
+
+    <h2 id="sec_notes">Notes</h2>
+    <label id="lb_notes">Message / Conditions</label>
+    <textarea id="notes" placeholder="Merci pour votre confiance. Paiement: ..."></textarea>
+
+    <div class="btns">
+      <button class="primary" id="btn_save">Save</button>
+      <button id="btn_print">Imprimer / PDF</button>
+      <button class="ghost" id="btn_new">Nouveau</button>
+      <button class="danger" id="btn_delete">Supprimer</button>
+      <button id="btn_export_current">Export JSON (Facture)</button>
+      <button id="btn_export_all">Export JSON (Tout)</button>
+      <button id="btn_import">Import JSON</button>
+    </div>
+
+    <div class="note" id="hint">
+      ✅ بلا TVA • طبع: <b>Imprimer / PDF</b> ثم اختار <b>Save as PDF</b>.
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div style="display:grid;gap:12px">
+    <div class="card no-print">
+      <div class="listHead">
+        <div>
+          <h1 style="margin:0 0 4px 0" id="list_title">Factures enregistrées</h1>
+          <div class="note" id="list_sub">فتح/تعديل/حذف + بحث</div>
+        </div>
+        <div style="min-width:220px">
+          <input id="search" placeholder="بحث: رقم / اسم / تاريخ..." />
+        </div>
+      </div>
+      <div class="hr"></div>
+      <div class="list" id="invoiceList"></div>
+      <div class="note" style="margin-top:10px" id="backup_note">
+        Backup: دير <b>Export JSON (Tout)</b> باش تحافظ على الفواتير.
+      </div>
+    </div>
+
+    <div class="card" style="padding:12px">
+      <div class="printWrap" id="printArea">
+        <div class="pHead">
+          <div class="pLogoBox">
+            <img class="pLogo" id="pLogo" src="logo.png" alt="Logo" />
+            <div class="pBrand">
+              <div class="name" id="pSellerName">NADIA GLAMOUR</div>
+              <div class="sub" id="pSellerSub">SERVICE TRAITEUR</div>
+              <div class="sub pMuted" id="pSellerInfo" style="white-space:pre-line;margin-top:6px">
+Tel: …
+Adresse: …
+              </div>
+            </div>
+          </div>
+          <div class="pMeta">
+            <div class="tag" id="pTag">FACTURE</div><br/>
+            <div><span id="pNumLabel">N°</span> <b id="pInvNumber">—</b></div>
+            <div><span id="pDateLabel">Date</span>: <b id="pInvDate">—</b></div>
+            <div><span id="pPayLabel">Paiement</span>: <b id="pPayment">—</b></div>
+          </div>
+        </div>
+
+        <div class="pBody">
+          <div class="pGrid">
+            <div class="pBlock" style="white-space:pre-line">
+              <b id="pBillToLabel">Facturé à</b>
+              <span id="pClientName">—</span>
+              <div id="pClientInfo" style="white-space:pre-line;color:#333;margin-top:4px"></div>
+              <div style="margin-top:6px" class="pMuted">
+                <span id="pPhoneLabel">Tel</span>: <span id="pClientPhone">—</span>
+              </div>
+            </div>
+
+            <div class="pBlock">
+              <b id="pEventLabel">Événement</b>
+              <div><span id="pEventName">—</span></div>
+              <div class="pMuted" style="margin-top:6px">
+                <span id="pPlaceLabel">Lieu</span>: <span id="pEventPlace">—</span>
+              </div>
+              <div class="pMuted" style="margin-top:6px">
+                <span id="pCurLabel">Devise</span>: <span id="pCurrency">MAD</span>
+              </div>
+            </div>
+          </div>
+
+          <table class="pTable">
+            <thead>
+              <tr>
+                <th id="pThDesc">Description</th>
+                <th class="right" id="pThQty">Qté</th>
+                <th class="right" id="pThUnit">PU</th>
+                <th class="right" id="pThTotal">Total</th>
+              </tr>
+            </thead>
+            <tbody id="pLines"></tbody>
+          </table>
+
+          <div class="pTotals">
+            <div><span id="pSubLabel">Sous-total</span> <b><span id="pSub">0.00</span> <span id="pCur1">MAD</span></b></div>
+            <div><span id="pTotalLabel">Total</span> <b><span id="pTotal">0.00</span> <span id="pCur2">MAD</span></b></div>
+            <div><span id="pAdvLabel">Avance</span> <b><span id="pAdv">0.00</span> <span id="pCur3">MAD</span></b></div>
+            <div><span id="pDueLabel">Reste</span> <b><span id="pDue">0.00</span> <span id="pCur4">MAD</span></b></div>
+          </div>
+        </div>
+
+        <div class="pFoot">
+          <div id="pNotes" style="white-space:pre-line"></div>
+          <div class="sigRow">
+            <div class="sigBox">
+              <b id="pSigClient">Signature client</b>
+            </div>
+            <div class="sigBox">
+              <b id="pSigSeller">Signature & Cachet</b>
+              <div class="pMuted">NADIA GLAMOUR</div>
+            </div>
+          </div>
+          <div class="pRight pMuted" id="pFooterSmall"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="fileImport" accept="application/json" style="display:none" />
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+
+  const KEY_ALL = "ng_invoices_v1";
+  const KEY_ACTIVE = "ng_active_invoice_id_v1";
+
+  let invoices = loadAll();
+  let activeId = localStorage.getItem(KEY_ACTIVE) || null;
+
+  const state = { id: null, lines: [] };
+
+  const pad = (n, w=4) => String(n).padStart(w, "0");
+  const money = (n) => (Math.round((n + Number.EPSILON) * 100) / 100).toFixed(2);
+
+  function todayISO(){
+    const d = new Date();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    return `${d.getFullYear()}-${m}-${day}`;
+  }
+  function uuid(){
+    return "id-" + Math.random().toString(16).slice(2) + "-" + Date.now().toString(16);
+  }
+  function escapeHtml(s){
+    return String(s || "").replace(/[&<>"']/g, (c)=>({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[c]));
+  }
+  function nextInvoiceNumber(){
+    const y = String(new Date().getFullYear());
+    const key = `ng_counter_${y}`;
+    const current = Number(localStorage.getItem(key) || 0) + 1;
+    localStorage.setItem(key, String(current));
+    return `NG-${y}-${pad(current,4)}`;
+  }
+
+  function loadAll(){
+    try { return JSON.parse(localStorage.getItem(KEY_ALL) || "[]"); }
+    catch { return []; }
+  }
+  function saveAll(){
+    localStorage.setItem(KEY_ALL, JSON.stringify(invoices));
+  }
+
+  const T = {
+    fr: {
+      ui_total_label:"Total", ui_lang_label:"Lang", badge:"NADIA GLAMOUR • SERVICE TRAITEUR",
+      sec_invoice:"Infos Facture", sec_lines:"Lignes (Services)", sec_notes:"Notes",
+      lb_lang:"Langue", lb_currency:"Devise", lb_number:"N° Facture", lb_date:"Date",
+      lb_event:"Événement", lb_place:"Lieu", lb_client:"Client", lb_phone:"Téléphone",
+      lb_address:"Adresse / Détails client", lb_preset:"Preset (Traiteur)", lb_pay:"Paiement",
+      lb_desc:"Description", lb_qty:"Qté", lb_unit:"Prix Unitaire",
+      th_desc:"Description", th_qty:"Qté", th_unit:"PU", th_total:"Total",
+      lb_notes:"Message / Conditions",
+      btn_save:"Save", btn_print:"Imprimer / PDF", btn_new:"Nouveau", btn_delete:"Supprimer",
+      export_one:"Export JSON (Facture)", export_all:"Export JSON (Tout)", import_json:"Import JSON",
+      list_title:"Factures enregistrées", list_sub:"Ouvrir / modifier / supprimer + recherche",
+      search_ph:"Recherche: numéro / nom / date...",
+      pay_non:"Non payé", pay_av:"Avance", pay_yes:"Payé",
+      pTag:"FACTURE", pNum:"N°", pDate:"Date", pPay:"Paiement",
+      pBill:"Facturé à", pPhone:"Tel", pEvent:"Événement", pPlace:"Lieu", pCur:"Devise",
+      pSub:"Sous-total", pTotal:"Total",
+      sig_client:"Signature client", sig_seller:"Signature & Cachet",
+      lb_advance:"Avance", lb_due:"Reste à payer", pAdv:"Avance", pDue:"Reste à payer",
+      hint:"✅ Sans TVA • Cliquez sur <b>Imprimer / PDF</b> puis choisissez <b>Save as PDF</b>."
+    },
+    ar: {
+      ui_total_label:"المجموع", ui_lang_label:"اللغة", badge:"NADIA GLAMOUR • خدمة التريتور",
+      sec_invoice:"معلومات الفاتورة", sec_lines:"الخدمات", sec_notes:"ملاحظات",
+      lb_lang:"اللغة", lb_currency:"العملة", lb_number:"رقم الفاتورة", lb_date:"التاريخ",
+      lb_event:"المناسبة", lb_place:"المكان", lb_client:"الزبون", lb_phone:"الهاتف",
+      lb_address:"العنوان / تفاصيل الزبون", lb_preset:"اختيار سريع", lb_pay:"الدفع",
+      lb_desc:"الوصف", lb_qty:"الكمية", lb_unit:"ثمن الوحدة",
+      th_desc:"الوصف", th_qty:"الكمية", th_unit:"ثمن", th_total:"المجموع",
+      lb_notes:"رسالة / شروط",
+      btn_save:"حفظ", btn_print:"طباعة / PDF", btn_new:"فاتورة جديدة", btn_delete:"حذف",
+      export_one:"تصدير JSON (فاتورة)", export_all:"تصدير JSON (الكل)", import_json:"استيراد JSON",
+      list_title:"الفواتير المحفوظة", list_sub:"فتح / تعديل / حذف + بحث",
+      search_ph:"بحث: رقم / اسم / تاريخ...",
+      pay_non:"غير مؤدى", pay_av:"تسبيق", pay_yes:"مؤدى",
+      pTag:"فاتورة", pNum:"رقم", pDate:"تاريخ", pPay:"الدفع",
+      pBill:"فاتورة إلى", pPhone:"هاتف", pEvent:"المناسبة", pPlace:"المكان", pCur:"العملة",
+      pSub:"المجموع", pTotal:"المجموع",
+      sig_client:"توقيع الزبون", sig_seller:"توقيع وخاتم",
+      lb_advance:"التسبيق", lb_due:"الباقي", pAdv:"التسبيق", pDue:"الباقي",
+      hint:"✅ بلا TVA • كليك على <b>طباعة / PDF</b> ثم <b>Save as PDF</b>."
+    }
+  };
+
+  function applyLang(lang){
+    const tr = T[lang] || T.fr;
+
+    $("ui_total_label").textContent = tr.ui_total_label;
+    $("ui_lang_label").textContent = tr.ui_lang_label;
+    $("ui_badge").textContent = tr.badge;
+
+    $("sec_invoice").textContent = tr.sec_invoice;
+    $("sec_lines").textContent = tr.sec_lines;
+    $("sec_notes").textContent = tr.sec_notes;
+
+    $("lb_lang").textContent = tr.lb_lang;
+    $("lb_currency").textContent = tr.lb_currency;
+    $("lb_number").textContent = tr.lb_number;
+    $("lb_date").textContent = tr.lb_date;
+    $("lb_event").textContent = tr.lb_event;
+    $("lb_place").textContent = tr.lb_place;
+    $("lb_client").textContent = tr.lb_client;
+    $("lb_phone").textContent = tr.lb_phone;
+    $("lb_address").textContent = tr.lb_address;
+
+    $("lb_pay").textContent = tr.lb_pay;
+    $("lb_advance").textContent = tr.lb_advance;
+    $("lb_due").textContent = tr.lb_due;
+
+    $("lb_preset").textContent = tr.lb_preset;
+    $("lb_desc").textContent = tr.lb_desc;
+    $("lb_qty").textContent = tr.lb_qty;
+    $("lb_unit").textContent = tr.lb_unit;
+
+    $("th_desc").textContent = tr.th_desc;
+    $("th_qty").textContent = tr.th_qty;
+    $("th_unit").textContent = tr.th_unit;
+    $("th_total").textContent = tr.th_total;
+
+    $("lb_notes").textContent = tr.lb_notes;
+
+    $("btn_save").textContent = tr.btn_save;
+    $("btn_print").textContent = tr.btn_print;
+    $("btn_new").textContent = tr.btn_new;
+    $("btn_delete").textContent = tr.btn_delete;
+    $("btn_export_current").textContent = tr.export_one;
+    $("btn_export_all").textContent = tr.export_all;
+    $("btn_import").textContent = tr.import_json;
+
+    $("list_title").textContent = tr.list_title;
+    $("list_sub").textContent = tr.list_sub;
+    $("search").placeholder = tr.search_ph;
+
+    const ps = $("paymentStatus");
+    ps.options[0].text = tr.pay_non;
+    ps.options[1].text = tr.pay_av;
+    ps.options[2].text = tr.pay_yes;
+
+    $("pTag").textContent = tr.pTag;
+    $("pNumLabel").textContent = tr.pNum;
+    $("pDateLabel").textContent = tr.pDate;
+    $("pPayLabel").textContent = tr.pPay;
+    $("pBillToLabel").textContent = tr.pBill;
+    $("pPhoneLabel").textContent = tr.pPhone;
+    $("pEventLabel").textContent = tr.pEvent;
+    $("pPlaceLabel").textContent = tr.pPlace;
+    $("pCurLabel").textContent = tr.pCur;
+    $("pSubLabel").textContent = tr.pSub;
+    $("pTotalLabel").textContent = tr.pTotal;
+    $("pSigClient").textContent = tr.sig_client;
+    $("pSigSeller").textContent = tr.sig_seller;
+
+    $("pAdvLabel").textContent = tr.pAdv;
+    $("pDueLabel").textContent = tr.pDue;
+
+    $("hint").innerHTML = tr.hint;
+
+    document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
+    document.documentElement.lang = (lang === "ar") ? "ar" : "fr";
+    $("ui_lang").textContent = (lang === "ar") ? "AR" : "FR";
+  }
+
+  function renderLines(){
+    const tbody = $("lines");
+    tbody.innerHTML = "";
+    state.lines.forEach((l, idx)=>{
+      const lt = l.qty * l.price;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${escapeHtml(l.desc)}</td>
+        <td class="right">${l.qty}</td>
+        <td class="right">${money(l.price)}</td>
+        <td class="right">${money(lt)}</td>
+        <td class="right"><button class="danger" data-del="${idx}">X</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    tbody.querySelectorAll("button[data-del]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const i = Number(btn.getAttribute("data-del"));
+        state.lines.splice(i,1);
+        renderLines();
+        syncPreview();
+      });
+    });
+  }
+
+  function syncPreview(){
+    const cur = $("currency").value;
+    $("ui_cur").textContent = cur;
+    $("ui_number").textContent = $("invNumber").value || "—";
+
+    $("pInvNumber").textContent = $("invNumber").value || "—";
+    $("pInvDate").textContent = $("invDate").value || "—";
+    $("pClientName").textContent = $("clientName").value || "—";
+    $("pClientPhone").textContent = $("clientPhone").value || "—";
+    $("pClientInfo").textContent = $("clientInfo").value || "";
+
+    $("pEventName").textContent = $("eventName").value || "—";
+    $("pEventPlace").textContent = $("eventPlace").value || "—";
+
+    const payVal = $("paymentStatus").value;
+    const lang = $("lang").value;
+    const tr = T[lang] || T.fr;
+    const payText = (payVal==="paye") ? tr.pay_yes : (payVal==="avance") ? tr.pay_av : tr.pay_non;
+    $("pPayment").textContent = payText;
+
+    $("pCurrency").textContent = cur;
+    $("pCur1").textContent = cur;
+    $("pCur2").textContent = cur;
+    $("pCur3").textContent = cur;
+    $("pCur4").textContent = cur;
+
+    const pLines = $("pLines");
+    pLines.innerHTML = "";
+    let sub = 0;
+
+    state.lines.forEach(l=>{
+      const lt = l.qty * l.price;
+      sub += lt;
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${escapeHtml(l.desc)}</td>
+        <td class="right">${l.qty}</td>
+        <td class="right">${money(l.price)} ${cur}</td>
+        <td class="right">${money(lt)} ${cur}</td>
+      `;
+      pLines.appendChild(row);
+    });
+
+    const adv = Math.max(0, Number($("advance").value || 0));
+    const due = Math.max(0, sub - adv);
+
+    $("pSub").textContent = money(sub);
+    $("pTotal").textContent = money(sub);
+
+    $("pAdv").textContent = money(adv);
+    $("pDue").textContent = money(due);
+
+    $("ui_total").textContent = money(sub);
+    $("due").value = money(due) + " " + cur;
+
+    $("pNotes").textContent = $("notes").value || "";
+    $("pFooterSmall").textContent = `Generated • ${todayISO()}`;
+  }
+
+  function getForm(){
+    return {
+      id: state.id || uuid(),
+      lang: $("lang").value,
+      currency: $("currency").value,
+      invNumber: $("invNumber").value.trim(),
+      invDate: $("invDate").value,
+      eventName: $("eventName").value.trim(),
+      eventPlace: $("eventPlace").value.trim(),
+      clientName: $("clientName").value.trim(),
+      clientPhone: $("clientPhone").value.trim(),
+      clientInfo: $("clientInfo").value,
+      paymentStatus: $("paymentStatus").value,
+      advance: Number($("advance").value || 0),
+      notes: $("notes").value,
+      lines: state.lines.slice(),
+      updatedAt: Date.now()
+    };
+  }
+
+  function setForm(inv){
+    state.id = inv.id || null;
+    $("lang").value = inv.lang || "fr";
+    $("currency").value = inv.currency || "MAD";
+    $("invNumber").value = inv.invNumber || "";
+    $("invDate").value = inv.invDate || todayISO();
+    $("eventName").value = inv.eventName || "";
+    $("eventPlace").value = inv.eventPlace || "";
+    $("clientName").value = inv.clientName || "";
+    $("clientPhone").value = inv.clientPhone || "";
+    $("clientInfo").value = inv.clientInfo || "";
+    $("paymentStatus").value = inv.paymentStatus || "non_paye";
+    $("advance").value = Number(inv.advance || 0);
+    $("notes").value = inv.notes || "";
+    state.lines = Array.isArray(inv.lines) ? inv.lines.slice() : [];
+
+    applyLang($("lang").value);
+    renderLines();
+    syncPreview();
+  }
+
+  function saveCurrent(){
+    if (!$("invNumber").value.trim()){
+      $("invNumber").value = nextInvoiceNumber();
+    }
+    const inv = getForm();
+    const idx = invoices.findIndex(x=>x.id===inv.id);
+    if (idx >= 0) invoices[idx] = inv;
+    else invoices.unshift(inv);
+
+    saveAll();
+    activeId = inv.id;
+    localStorage.setItem(KEY_ACTIVE, activeId);
+    renderList();
+    markActive();
+  }
+
+  function deleteCurrent(){
+    if(!state.id) return;
+    if(!confirm("Supprimer cette facture ? / حذف هاد الفاتورة؟")) return;
+    invoices = invoices.filter(x=>x.id!==state.id);
+    saveAll();
+    state.id = null;
+    activeId = null;
+    localStorage.removeItem(KEY_ACTIVE);
+    newInvoice(true);
+    renderList();
+  }
+
+  function newInvoice(silent=false){
+    state.id = null;
+    state.lines = [];
+    $("invDate").value = todayISO();
+    $("invNumber").value = nextInvoiceNumber();
+    $("eventName").value = "";
+    $("eventPlace").value = "";
+    $("clientName").value = "";
+    $("clientPhone").value = "";
+    $("clientInfo").value = "";
+    $("paymentStatus").value = "non_paye";
+    $("advance").value = 0;
+    $("due").value = "0.00";
+    if(!$("notes").value.trim()){
+      $("notes").value = "Merci pour votre confiance.\nPaiement: ...";
+    }
+    renderLines();
+    syncPreview();
+    if(!silent) markActive();
+  }
+
+  function renderList(){
+    const q = ($("search").value || "").toLowerCase().trim();
+    const list = $("invoiceList");
+    list.innerHTML = "";
+
+    const filtered = invoices.filter(inv=>{
+      const hay = `${inv.invNumber} ${inv.clientName} ${inv.invDate}`.toLowerCase();
+      return !q || hay.includes(q);
+    });
+
+    if(filtered.length === 0){
+      const div = document.createElement("div");
+      div.className = "item";
+      div.innerHTML = `<div><b>—</b><small>Aucune facture</small></div><small> </small>`;
+      list.appendChild(div);
+      return;
+    }
+
+    filtered.forEach(inv=>{
+      const div = document.createElement("div");
+      div.className = "item";
+      div.dataset.id = inv.id;
+
+      const total = inv.lines?.reduce((s,l)=> s + (Number(l.qty)||0)*(Number(l.price)||0), 0) || 0;
+      const adv = Math.max(0, Number(inv.advance || 0));
+      const due = Math.max(0, total - adv);
+
+      div.innerHTML = `
+        <div>
+          <b>${escapeHtml(inv.invNumber || "—")}</b>
+          <small>${escapeHtml(inv.clientName || "—")} • ${escapeHtml(inv.eventName || "")}</small>
+        </div>
+        <small>${escapeHtml(inv.invDate||"—")} • ${money(total)} ${escapeHtml(inv.currency||"MAD")} • Reste: ${money(due)}</small>
+      `;
+
+      div.addEventListener("click", ()=>{
+        activeId = inv.id;
+        localStorage.setItem(KEY_ACTIVE, activeId);
+        setForm(inv);
+        markActive();
+      });
+      list.appendChild(div);
+    });
+
+    markActive();
+  }
+
+  function markActive(){
+    document.querySelectorAll(".item").forEach(el=>{
+      el.classList.toggle("active", el.dataset.id === activeId);
+    });
+  }
+
+  function downloadJSON(obj, filename){
+    const blob = new Blob([JSON.stringify(obj, null, 2)], {type:"application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+  function exportCurrent(){
+    const inv = getForm();
+    downloadJSON(inv, (inv.invNumber || "facture") + ".json");
+  }
+  function exportAll(){
+    downloadJSON(invoices, "NADIA_GLAMOUR_factures_backup.json");
+  }
+  function importJSONFile(file){
+    const reader = new FileReader();
+    reader.onload = () => {
+      try{
+        const data = JSON.parse(reader.result);
+        if(Array.isArray(data)){
+          const merged = [...data, ...invoices];
+          const map = new Map();
+          merged.forEach(x=>{ if(x && x.id) map.set(x.id, x); });
+          invoices = Array.from(map.values()).sort((a,b)=> (b.updatedAt||0)-(a.updatedAt||0));
+          saveAll(); renderList();
+          alert("Import OK (liste).");
+        }else if(data && data.id){
+          const idx = invoices.findIndex(x=>x.id===data.id);
+          if(idx>=0) invoices[idx] = data; else invoices.unshift(data);
+          saveAll(); renderList();
+          alert("Import OK (facture).");
+        }else{
+          alert("JSON غير صالح.");
+        }
+      }catch{
+        alert("Erreur import JSON.");
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // Events
+  $("preset").addEventListener("change", ()=>{
+    const v = $("preset").value;
+    if(v) $("desc").value = v;
+  });
+
+  $("addLine").addEventListener("click", (e)=>{
+    e.preventDefault();
+    const desc = $("desc").value.trim();
+    const qty = Number($("qty").value || 1);
+    const price = Number($("price").value || 0);
+
+    if(!desc){ alert("كتب الوصف / Description."); return; }
+    if(qty <= 0){ alert("Qté خاصها تكون 1 ولا أكثر."); return; }
+    if(price < 0){ alert("Prix ما يقدرش يكون سالب."); return; }
+
+    state.lines.push({desc, qty, price});
+    $("desc").value = "";
+    $("qty").value = 1;
+    $("price").value = 0;
+
+    renderLines();
+    syncPreview();
+  });
+
+  $("btn_save").addEventListener("click", saveCurrent);
+  $("btn_delete").addEventListener("click", deleteCurrent);
+  $("btn_new").addEventListener("click", ()=> newInvoice(false));
+  $("btn_print").addEventListener("click", ()=> { syncPreview(); window.print(); });
+
+  $("btn_export_current").addEventListener("click", exportCurrent);
+  $("btn_export_all").addEventListener("click", exportAll);
+
+  $("btn_import").addEventListener("click", ()=> $("fileImport").click());
+  $("fileImport").addEventListener("change", (e)=>{
+    const f = e.target.files?.[0];
+    if(f) importJSONFile(f);
+    e.target.value = "";
+  });
+
+  $("search").addEventListener("input", renderList);
+
+  ["lang","currency","invNumber","invDate","eventName","eventPlace","clientName","clientPhone","clientInfo","paymentStatus","advance","notes"]
+    .forEach(id => $(id).addEventListener("input", ()=>{
+      applyLang($("lang").value);
+      syncPreview();
+      renderList();
+    }));
+
+  // Boot
+  $("invDate").value = todayISO();
+  $("invNumber").value = nextInvoiceNumber();
+  if(!$("notes").value.trim()){
+    $("notes").value = "Merci pour votre confiance.\nPaiement: ...";
+  }
+
+  if(activeId){
+    const inv = invoices.find(x=>x.id===activeId);
+    if(inv) setForm(inv);
+    else newInvoice(true);
+  } else {
+    newInvoice(true);
+  }
+
+  applyLang($("lang").value);
+  renderLines();
+  syncPreview();
+  renderList();
+})();
+</script>
+</body>
+</html>
